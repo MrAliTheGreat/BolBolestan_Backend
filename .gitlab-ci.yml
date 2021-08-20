@@ -1,0 +1,34 @@
+image: quay.io/aminrf/docker-kubectl:latest
+
+services:
+  - docker:dind
+
+stages:
+  - build
+  - deploy
+
+
+build:
+  image: docker
+  stage: build
+
+  before_script:
+    - docker login -u $REGISTERY_USERNAME -p $REGISTERY_PASSWORD quay.io
+
+  script:
+    - docker build ./CA9 -t quay.io/mr_ali_the_great/ie_backend_ca9:$CI_BUILD_REF
+    - docker push quay.io/mr_ali_the_great/ie_backend_ca9:$CI_BUILD_REF
+    - docker rmi quay.io/mr_ali_the_great/ie_backend_ca9:$CI_BUILD_REF || true
+
+  after_script:
+    - docker logout quay.io
+
+
+
+deploy:
+  stage: deploy
+  when: manual
+  script:
+    - echo $KUBERNETES_CONFIG | base64 -d > kube.config
+    - kubectl --kubeconfig kube.config set image deployment/backend-deployment backend=quay.io/mr_ali_the_great/ie_backend_ca9:$CI_BUILD_REF
+    - rm kube.config

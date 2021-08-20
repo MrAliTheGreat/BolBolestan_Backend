@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment                    # Type of the kubernetes resource => Deployment
+metadata:
+  name: bolbol-mysql                # Name of the deployment
+  labels:                           # Labels applied to this deployment
+    app: bolbol-mysql
+spec:
+  selector:
+    matchLabels:                    # This deployment applies to the Pods matching the specified labels
+      app: bolbol-mysql
+      tier: mysql
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 1
+  template:                         # Template for the Pods in this deployment
+    metadata:
+      labels:                       # Labels to be applied to the Pods in this deployment
+        app: bolbol-mysql
+        tier: mysql
+    spec:                           # The spec for the containers that will be run inside the Pods in this deployment
+      containers:
+        - image: quay.io/sina/mysql:8.0           # The container image from TA Repo
+          name: mysql
+          env:                        # Environment variables passed to the container
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:                # Read environment variables from kubernetes secrets
+                secretKeyRef:
+                  name: db-secrets
+                  key: mysql-password
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: db-secrets
+                  key: mysql-name
+          ports:
+            - containerPort: 3306        # The port that the container exposes
+              name: mysql
+          resources:
+            limits:
+              memory: "500M"
+              cpu: "333m"
+            requests:
+              memory: "500M"
+              cpu: "333m"
+          volumeMounts:
+            - name: mysql-persistent-storage  # This name should match the name specified in `volumes.name`
+              mountPath: /var/lib/mysql
+              subPath: backend-mysql
+      volumes:                       # A PersistentVolume is mounted as a volume to the Pod
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc

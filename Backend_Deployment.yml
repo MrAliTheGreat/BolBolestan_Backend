@@ -1,0 +1,35 @@
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: back-deploy           # Name of the kubernetes resource
+  namespace: ali-ns
+  labels:                     # Labels that will be applied to this resource
+    app: back-deploy
+spec:
+  replicas: 2                 # No. of replicas/pods to run in this deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+  selector:
+    matchLabels:              # The deployment applies to any pods matching the specified labels
+      app: back-deploy
+  template:                   # Template for creating the pods in this deployment
+    metadata:
+      labels:                 # Labels that will be applied to each Pod in this deployment
+        app: back-deploy
+    spec:                     # Spec for the containers that will be run in the Pods
+      containers:
+        - name: back-deploy
+          image: quay.io/mr_ali_the_great/ie_backend_ca9:v1.3
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 8080 # The port that the container exposes
+          resources:
+            limits:
+              memory: "333Mi"
+              cpu: "300m"
+            requests:
+              memory: "333Mi"
+              cpu: "300m"

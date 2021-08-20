@@ -1,0 +1,3 @@
+addToWeeklySchedule {"StudentId": "810196123", "code": "81013602"}
+addToWeeklySchedule {"StudentId": "810196123", "code": "81013604"}
+finalize {"StudentId": "810196123"}

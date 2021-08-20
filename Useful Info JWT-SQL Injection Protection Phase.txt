@@ -1,0 +1,26 @@
+https://blog.softtek.com/en/token-based-api-authentication-with-spring-and-jwt
+Really good link! Implemented all JWT related parts
+
+
+
+https://gist.github.com/OmarElGabry/bfbbbe5d082e003ce1f007c5b8b513ac
+Implemented OncePerRequestFilter
+
+
+
+https://www.toptal.com/java/rest-security-with-jwt-spring-security-and-java
+
+
+
+https://www.tutorialspoint.com/spring_boot/spring_boot_servlet_filter.htm
+Getting familiar with filters in java servlets
+
+
+
+https://stackoverflow.com/questions/43051291/attach-authorization-header-for-all-axios-requests
+Cool implementation related to React authentication header
+
+
+
+https://www.javadevjournal.com/spring-boot/spring-boot-add-filter/
+Ay worth a glance not that much useful info
